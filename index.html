@@ -411,45 +411,12 @@
                 }
             }
 
-            function connect() {
-                if (mouse.x == null || mouse.y == null) return;
-
-                let opacityValue = 1;
-                for (let a = 0; a < particlesArray.length; a++) {
-                    // Calculate distance from particle to mouse
-                    let dxMouse = particlesArray[a].x - mouse.x;
-                    let dyMouse = particlesArray[a].y - mouse.y;
-                    let distanceToMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-
-                    // Only connect if particle is close to the mouse
-                    if (distanceToMouse < mouse.radius * 1.5) {
-                        for (let b = a; b < particlesArray.length; b++) {
-                            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                            + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                            
-                            // And the other particle is also nearby
-                            if (distance < (canvas.width/9) * (canvas.height/9)) {
-                                // Opacity fades out based on distance to mouse
-                                opacityValue = 1 - (distanceToMouse / (mouse.radius * 1.5));
-                                ctx.strokeStyle = 'rgba(16, 185, 129,' + (opacityValue * 0.5) + ')'; // Sage/Emerald Green
-                                ctx.lineWidth = 1;
-                                ctx.beginPath();
-                                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                                ctx.stroke();
-                            }
-                        }
-                    }
-                }
-            }
-
             function animate() {
                 requestAnimationFrame(animate);
                 ctx.clearRect(0,0,innerWidth, innerHeight);
                 for (let i = 0; i < particlesArray.length; i++) {
                     particlesArray[i].update();
                 }
-                connect();
             }
 
             window.addEventListener('resize',
